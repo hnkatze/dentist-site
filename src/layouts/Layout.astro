@@ -1,3 +1,8 @@
+---
+import Footer from '../components/Footer.astro';
+import NavBar from '../components/NavBar.astro';
+import '../styles/global.css';
+---
 <!doctype html>
 <html lang="en">
 	<head>
@@ -8,7 +13,9 @@
 		<title>Astro Basics</title>
 	</head>
 	<body>
+		<NavBar color1="#6e43f8" color2="#9161fa" />
 		<slot />
+		<Footer color1="#6e43f8" color5="#f7b8ff" />
 	</body>
 </html>
 

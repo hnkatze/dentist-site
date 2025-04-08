@@ -1,0 +1,137 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/logo.svg";
+
+---
+
+<nav class={`fixed w-full top-0 z-50 bg-[#6e43f8] shadow-md`}>
+  <div class="container mx-auto px-6 py-4">
+    <div class="flex items-center justify-between">
+      <!-- Logo -->
+      <a 
+        href="#inicio" 
+        class="flex items-center space-x-2 text-white hover:text-[#f7b8ff] transition-colors"
+      >
+      <Image src={logo}  alt="Logo" class="w-10 h-10" />
+        <span class="text-xl font-bold">DentalCare</span>
+      </a>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a 
+          href="#servicios" 
+          class="text-white hover:text-[#f7b8ff] transition-colors nav-link"
+          data-section="servicios"
+        >Servicios</a>
+        <a 
+          href="#sobre-mi" 
+          class="text-white hover:text-[#f7b8ff] transition-colors nav-link"
+          data-section="sobre-mi"
+        >Sobre mí</a>
+        <a 
+          href="#testimonios" 
+          class="text-white hover:text-[#f7b8ff] transition-colors nav-link"
+          data-section="testimonios"
+        >Testimonios</a>
+        <a 
+          href="#contacto" 
+          class="px-6 py-2 bg-[#9161fa] text-white font-medium rounded-full hover:bg-[#6e43f8] transition-colors"
+        >Reserva tu cita</a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobileMenuButton" class="md:hidden text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-16 6h16"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div 
+    id="mobileMenu" 
+    class="absolute top-full left-0 w-full bg-[#6e43f8] hidden md:hidden transition-all duration-300 opacity-0"
+  >
+    <div class="container mx-auto px-6 py-4">
+      <div class="flex flex-col space-y-6 items-center">
+        <a href="#servicios" class="text-white">Servicios</a>
+        <a href="#sobre-mi" class="text-white">Sobre mí</a>
+        <a href="#testimonios" class="text-white">Testimonios</a>
+        <a href="#contacto" class="text-white px-6 py-2 bg-[#9161fa] rounded-full">Reserva</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Mobile Menu Toggle
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    mobileMenuButton?.addEventListener('click', () => {
+      mobileMenu?.classList.toggle('hidden');
+      mobileMenu?.classList.toggle('opacity-0');
+    });
+
+    // Smooth scroll y actualización de active link
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (this: HTMLAnchorElement, e: Event) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href')!);
+        target?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+        
+        // Cerrar mobile menu después de click
+        mobileMenu?.classList.add('hidden', 'opacity-0');
+      });
+    });
+
+    // Detectar scroll para active class
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('section');
+      const scrollPosition = window.scrollY + 100;
+      
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+          const id = section.getAttribute('id');
+          document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('text-[#f7b8ff]', 'font-semibold');
+            if(link.getAttribute('href') === `#${id}`) {
+              link.classList.add('text-[#f7b8ff]', 'font-semibold');
+            }
+          });
+        }
+      });
+    });
+  </script>
+</nav>
+
+<style>
+  nav {
+    transition: background-color 0.3s ease;
+  }
+  
+  .nav-link {
+    position: relative;
+  }
+  
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #f7b8ff;
+    transition: width 0.3s ease;
+  }
+  
+  .nav-link:hover::after {
+    width: 100%;
+  }
+</style>
